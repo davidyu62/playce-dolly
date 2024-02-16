@@ -25,6 +25,7 @@
         <project.build.target.version>1.7</project.build.target.version>
         <lib.javassist.version>3.12.1.GA</lib.javassist.version>
         <lib.infinispan.version>6.0.0.Final</lib.infinispan.version>
+		<lib.lettuce.core.version>6.2.5.RELEASE</lib.lettuce.core.version>
 		<skipTests>true</skipTests>
 	</properties>
 
@@ -81,6 +82,13 @@
             <artifactId>gson</artifactId>
             <version>2.2.2</version>
         </dependency>
+
+		<!-- https://mvnrepository.com/artifact/io.lettuce/lettuce-core -->
+		<dependency>
+			<groupId>io.lettuce</groupId>
+			<artifactId>lettuce-core</artifactId>
+			<version>${lib.lettuce.core.version}</version>
+		</dependency>
 		
 		<!-- junit -->
 		<dependency>

@@ -30,10 +30,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
 import com.athena.dolly.common.exception.ConfigurationException;
+import lombok.Data;
 
 /**
  * <pre>
@@ -42,6 +44,7 @@ import com.athena.dolly.common.exception.ConfigurationException;
  * @author Sang-cheon Park
  * @version 1.0
  */
+@Data
 public class DollyConfig {
 
 	protected static final String CONFIG_FILE 				= "dolly.properties";
@@ -61,6 +64,16 @@ public class DollyConfig {
 	private static final String PROPAGATE_SESSION			= "dolly.propagate.session";
 	private static final String SESSION_MAP_SIZE			= "dolly.session.map.size";
 	private static final String SESSION_CHECK_TIME 			= "dolly.session.map.check.time.sec";
+
+	/** for properties of redis */
+	private static final String REDIS_AUTH_USAGE            = "redis.auth.usage";
+	private static final String REDIS_AUTH_USERNAME         = "redis.auth.username";
+	private static final String REDIS_AUTH_PASSWORD         = "redis.auth.password";
+
+	/** for replication master-slave-sentinel*/
+	private static final String REDIS_MASTER_NAME 			= "redis.master.name";
+	private static final String REDIS_SENTINEL_HOST			= "redis.repli.sentinel.hosts";
+
 
     private static final String USE_EMBEDDED 				= "dolly.use.infinispan.embedded";
     private static final String HOTROD_HOST 				= "dolly.hotrod.host";
@@ -96,6 +109,12 @@ public class DollyConfig {
     private boolean enableSSO;
     private String ssoParamKey;
     private int timeout = 30;
+
+	private String redisAuthUsage;
+	private String redisAuthUserName;
+	private String redisAuthPassword;
+	private String redisMasterName;
+	private String redisSentinelHost;
 
     private boolean useEmbedded;
     private String hotrodHost;
@@ -264,6 +283,14 @@ public class DollyConfig {
 		this.dollyMapSize = Integer.parseInt(config.getProperty(SESSION_MAP_SIZE, "50"));
 		this.dollyMapCheckTime = Long.parseLong(config.getProperty(SESSION_CHECK_TIME, "60"));
 
+		// for redis
+		this.redisMasterName = config.getProperty(REDIS_MASTER_NAME,"");
+		this.redisAuthUsage = config.getProperty(REDIS_AUTH_USAGE,"true");
+		this.redisAuthUserName = config.getProperty(REDIS_AUTH_USERNAME,"default");
+		this.redisAuthPassword = config.getProperty(REDIS_AUTH_PASSWORD,"1234");
+		this.redisSentinelHost	= config.getProperty(REDIS_SENTINEL_HOST,"");
+
+		// for infinispan
 		this.useEmbedded = Boolean.parseBoolean(config.getProperty(USE_EMBEDDED, "false"));
 		this.hotrodHost = config.getProperty(HOTROD_HOST, "0.0.0.0");
 		this.hotrodPort = Integer.parseInt(config.getProperty(HOTROD_PORT, "11222"));
@@ -517,6 +544,45 @@ public class DollyConfig {
 	 */
 	public void setPasswds(String[] passwds) {
 		this.passwds = passwds;
+	}
+
+	@Override
+	public String toString() {
+		return "DollyConfig{" +
+				"verbose=" + verbose +
+				", viewStat=" + viewStat +
+				", clientType='" + clientType + '\'' +
+				", classList=" + classList +
+				", ssoDomainList=" + ssoDomainList +
+				", sessionKeyList=" + sessionKeyList +
+				", readSessionLocalFirst=" + readSessionLocalFirst +
+				", propagateSession=" + propagateSession +
+				", dollyMapSize=" + dollyMapSize +
+				", dollyMapCheckTime=" + dollyMapCheckTime +
+				", enableSSO=" + enableSSO +
+				", ssoParamKey='" + ssoParamKey + '\'' +
+				", timeout=" + timeout +
+				", redisAuthUsage='" + redisAuthUsage + '\'' +
+				", redisAuthUserName='" + redisAuthUserName + '\'' +
+				", redisAuthPassword='" + redisAuthPassword + '\'' +
+				", redisMasterName='" + redisMasterName + '\'' +
+				", redisSentinelHost='" + redisSentinelHost + '\'' +
+				", useEmbedded=" + useEmbedded +
+				", hotrodHost='" + hotrodHost + '\'' +
+				", hotrodPort=" + hotrodPort +
+				", jgroupsStack='" + jgroupsStack + '\'' +
+				", jgroupsBindAddress='" + jgroupsBindAddress + '\'' +
+				", jgroupsBindPort='" + jgroupsBindPort + '\'' +
+				", jgroupsInitialHosts='" + jgroupsInitialHosts + '\'' +
+				", jgroupsMulticastPort='" + jgroupsMulticastPort + '\'' +
+				", couchbaseUris='" + couchbaseUris + '\'' +
+				", couchbaseBucketName='" + couchbaseBucketName + '\'' +
+				", couchbaseBucketPasswd='" + couchbaseBucketPasswd + '\'' +
+				", embedded=" + embedded +
+				", jmxServers=" + Arrays.toString(jmxServers) +
+				", users=" + Arrays.toString(users) +
+				", passwds=" + Arrays.toString(passwds) +
+				'}';
 	}
 }
 //end of DollyConfig.java

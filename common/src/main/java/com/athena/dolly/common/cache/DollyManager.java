@@ -31,6 +31,7 @@ import java.util.Map;
 import com.athena.dolly.common.cache.client.DollyClient;
 import com.athena.dolly.common.cache.client.impl.CouchbaseClient;
 import com.athena.dolly.common.cache.client.impl.HotRodClient;
+import com.athena.dolly.common.cache.client.impl.RedisClientImpl;
 import com.athena.dolly.common.exception.ConfigurationException;
 import com.athena.dolly.common.stats.DollyStats;
 
@@ -123,12 +124,19 @@ public class DollyManager {
     		System.out.println("[Dolly] Properties : ");
     		System.out.println(DollyConfig.properties.toString().replaceAll(", ",  "\n"));
     	}
+		System.out.println("-Here=================");
+		System.out.println("config.getClientType():"+config.getClientType());
     	
     	if (config.getClientType().equals("infinispan")) {
+			System.out.println("Infinispan Clinet==============");
         	client = new HotRodClient();
     	} else if (config.getClientType().equals("couchbase")) {
+			System.out.println("couchbase Clinet==============");
         	client = new CouchbaseClient();
-    	}
+    	} else if (config.getClientType().equals("redis")) {
+			System.out.println("Redis Clinet==============");
+			client = new RedisClientImpl();
+		}
 
 		dollyMap = new LinkedHashMap<String, Long>() {
 			@Override
